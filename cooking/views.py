@@ -5,8 +5,8 @@ from django.contrib import messages
 from django.views.generic import ListView, DetailView, CreateView, DeleteView, UpdateView
 from django.urls import reverse_lazy
 
-from .models import Post, Category
-from .forms import PostAddForm, LoginForm, RegistrationForm
+from .models import Post, Category, Comment
+from .forms import PostAddForm, LoginForm, RegistrationForm, CommentForm
 
 
 class Index(ListView):
@@ -49,6 +49,10 @@ class PostDetail(DetailView):
         posts = Post.objects.all().exclude(pk=self.kwargs['pk']).order_by('-watched')[:5]
         context['title'] = post
         context['ext_posts'] = posts
+        context['comments'] = Comment.objects.filter(post=post)
+
+        if self.request.user.is_authenticated:
+            context['comment_form'] = CommentForm
         return context
 
 
@@ -83,6 +87,18 @@ class SearchResult(Index):
             Q(title__icontains=word) | Q(content__icontains=word)
         )
         return posts
+
+
+def add_comment(request, post_id):
+    """Добавление комментарии к статьям"""
+    form = CommentForm(data=request.POST)
+    if form.is_valid():
+        comment = form.save(commit=False)
+        comment.user = request.user
+        comment.post = Post.objects.get(pk=post_id)
+        comment.save()
+
+    return redirect('post_detail', post_id)
 
 
 def user_login(request):

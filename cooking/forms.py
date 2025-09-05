@@ -2,7 +2,7 @@ from django import forms
 from django.contrib.auth.models import User
 from django.contrib.auth.forms import AuthenticationForm, UserCreationForm
 
-from .models import Post
+from .models import Post, Comment
 
 
 class PostAddForm(forms.ModelForm):
@@ -43,3 +43,14 @@ class RegistrationForm(UserCreationForm):
                                                                   'placeholder': 'Пароль'}))
     password2 = forms.CharField(widget=forms.PasswordInput(attrs={'class': 'form-control',
                                                                   'placeholder': 'Подтвердите пароль'}))
+
+
+class CommentForm(forms.ModelForm):
+    """Форма для написания комментарий"""
+    class Meta:
+        model = Comment
+        fields = ('text',)
+
+        widgets = {
+            'text': forms.Textarea(attrs={'class': 'form-control', 'placeholder': 'Текст вашего комментария'})
+        }
