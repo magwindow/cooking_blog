@@ -1,4 +1,4 @@
-from django.db.models import F
+from django.db.models import F, Q
 from django.shortcuts import render, redirect
 from django.contrib.auth import login, logout
 from django.contrib import messages
@@ -71,6 +71,18 @@ class PostDelete(DeleteView):
     model = Post
     success_url = reverse_lazy('index')
     context_object_name = 'post'
+    extra_context = {'title': 'Изменить статью'}
+
+
+class SearchResult(Index):
+    """Поиск слова в заголовках и содержании статьи"""
+    def get_queryset(self):
+        """Функция для фильтрации выборок из db"""
+        word = self.request.GET.get('q')
+        posts = Post.objects.filter(
+            Q(title__icontains=word) | Q(content__icontains=word)
+        )
+        return posts
 
 
 def user_login(request):

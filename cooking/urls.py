@@ -9,6 +9,7 @@ urlpatterns = [
     path('add_article/', AddPost.as_view(), name='add'),
     path('post/<int:pk>/update/', PostUpdate.as_view(), name='post_update'),
     path('post/<int:pk>/delete/', PostDelete.as_view(), name='post_delete'),
+    path('search/', SearchResult.as_view(), name='search'),
 
     # Маршруты на базе функции
     path('login/', user_login, name='login'),
