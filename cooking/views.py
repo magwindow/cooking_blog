@@ -1,6 +1,7 @@
 from django.db.models import F, Q
 from django.shortcuts import render, redirect
 from django.contrib.auth import login, logout
+from django.contrib.auth.models import User
 from django.contrib import messages
 from django.views.generic import ListView, DetailView, CreateView, DeleteView, UpdateView
 from django.urls import reverse_lazy
@@ -61,6 +62,10 @@ class AddPost(CreateView):
     form_class = PostAddForm
     template_name = 'cooking/article_add_form.html'
     extra_context = {'title': 'Добавить статью'}
+
+    def form_valid(self, form):
+        form.instance.author = self.request.user
+        return super().form_valid(form)
 
 
 class PostUpdate(UpdateView):
@@ -141,3 +146,14 @@ def register(request):
         'form': form
     }
     return render(request, 'cooking/register.html', context)
+
+
+def profile(request, user_id):
+    """Страница пользователя"""
+    user = User.objects.get(pk=user_id)
+    posts = Post.objects.filter(author=user)
+    context = {
+        'user': user,
+        'posts': posts
+    }
+    return render(request, 'cooking/profile.html', context)

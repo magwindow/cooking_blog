@@ -16,4 +16,5 @@ urlpatterns = [
     path('logout/', user_logout, name='logout'),
     path('register/', register, name='register'),
     path('add_comment/<int:post_id>/', add_comment, name='add_comment'),
+    path('profile/<int:user_id>/', profile, name='profile'),
 ]
