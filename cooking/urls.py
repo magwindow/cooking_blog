@@ -11,6 +11,10 @@ urlpatterns = [
     path('post/<int:pk>/delete/', PostDelete.as_view(), name='post_delete'),
     path('search/', SearchResult.as_view(), name='search'),
     path('password/', UserChangePassword.as_view(), name='change_password'),
+    path('post/api/', CookingAPI.as_view(), name='CookingAPI'),
+    path('post/api/<int:pk>', CookingAPIDetail.as_view(), name='CookingAPIDetail'),
+    path('categories/api', CookingCategoryAPI.as_view(), name='CookingCategoryAPI'),
+    path('categories/api/<int:pk>', CookingCategoryAPIDetail.as_view(), name='CookingCategoryAPIDetail'),
 
     # Маршруты на базе функции
     path('login/', user_login, name='login'),
