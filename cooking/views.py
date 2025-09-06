@@ -2,6 +2,7 @@ from django.db.models import F, Q
 from django.shortcuts import render, redirect
 from django.contrib.auth import login, logout
 from django.contrib.auth.models import User
+from django.contrib.auth.views import PasswordChangeView
 from django.contrib import messages
 from django.views.generic import ListView, DetailView, CreateView, DeleteView, UpdateView
 from django.urls import reverse_lazy
@@ -157,3 +158,9 @@ def profile(request, user_id):
         'posts': posts
     }
     return render(request, 'cooking/profile.html', context)
+
+
+class UserChangePassword(PasswordChangeView):
+    """Простой способ смены пароля пользователя"""
+    template_name = 'cooking/password_change_form.html'
+    success_url = reverse_lazy('index')
