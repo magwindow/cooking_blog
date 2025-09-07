@@ -6,7 +6,9 @@ from django.contrib.auth.views import PasswordChangeView
 from django.contrib import messages
 from django.views.generic import ListView, DetailView, CreateView, DeleteView, UpdateView
 from django.urls import reverse_lazy
+
 from rest_framework.generics import ListAPIView, RetrieveAPIView
+from rest_framework.permissions import IsAuthenticated
 
 from .serializers import PostSerializer, CategorySerializer
 from .models import Post, Category, Comment
@@ -178,6 +180,7 @@ class CookingAPIDetail(RetrieveAPIView):
     """Выдача статьи по API"""
     queryset = Post.objects.filter(is_published=True)
     serializer_class = PostSerializer
+    permission_classes = (IsAuthenticated,)
 
 
 class CookingCategoryAPI(ListAPIView):
